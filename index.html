@@ -200,6 +200,12 @@ body.tv .exit{display:inline-flex}
 @media(max-width:860px){.g2,.g2b{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){table{font-size:13px}th,td{padding:6px 4px}.charts li{grid-template-columns:2.4em 2.8em minmax(0,1fr);}.charts .val{grid-column:3;text-align:left}.charts .val b{display:inline;margin-right:6px}.heat{font-size:11px}.heat div{min-height:38px}.heat small{display:none}.hide-s{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* TV: Überschrift + Inhalt als Block senkrecht mittig, oben und unten gleicher Abstand */
+body.tv .band{padding-top:44px;padding-bottom:100px}
+body.tv .sec.on>.wrap{justify-content:center;min-height:calc(var(--tvh,100vh) - 144px)}
+body.tv .sec.on>.wrap>h2{margin-bottom:0!important}
+body.tv .sec.on>.wrap::after{display:none}
+body.tv .sec.on>.wrap>h2~*{margin-top:36px}
 </style>
 </head>
 <body>
