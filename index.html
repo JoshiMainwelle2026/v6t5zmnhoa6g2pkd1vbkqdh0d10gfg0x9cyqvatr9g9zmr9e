@@ -206,6 +206,10 @@ body.tv .sec.on>.wrap{justify-content:center;min-height:calc(var(--tvh,100vh) - 
 body.tv .sec.on>.wrap>h2{margin-bottom:0!important}
 body.tv .sec.on>.wrap::after{display:none}
 body.tv .sec.on>.wrap>h2~*{margin-top:36px}
+/* Charts-Karten: Kennzahlen als kleine Spalten (Zahl oben, Bezeichnung darunter) */
+.card .nums.n3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.card .nums.n3 span{display:flex;flex-direction:column;line-height:1.15;font-size:13px;color:var(--mute)}
+.card .nums.n3 b{font-size:20px;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -362,6 +366,7 @@ function kpis(){
  const A=D.account,P=D[plat];
  const k=plat==='ig'?[
   [fk(A.ig.reach),'Reichweite, 28 Tage','+'+f1(A.ig.reach_change)+' % zum Vorzeitraum'],
+  [fk(A.ig.views),'Aufrufe, 28 Tage',(A.ig.views_change>=0?'+':'')+f1(A.ig.views_change)+' % zum Vorzeitraum'],
   [f1(A.ig.reach_nonfollowers/(A.ig.reach_nonfollowers+A.ig.reach_followers)*100)+' %','Discovery-Quote (Reichweite von Nicht-Followern)',''],
   ['+'+f0(A.ig.new_followers-A.ig.lost_followers),'Follower netto, 28 Tage',f0(A.ig.new_followers)+' neu, '+f0(A.ig.lost_followers)+' verloren'],
   [f1(P.totals.score_med),'Mainwelle-Score (Median)','pro 1.000 erreichte Konten'],
@@ -421,7 +426,7 @@ function charts(){
  $('top5').innerHTML=P.charts.slice(0,10).map(c=>{const m=move(c),u=safeUrl(c.url),img=T[c.url];
   const pic=img&&/^data:image\/jpeg;base64,/.test(img)?`<img src="${img}" alt="">`:`<div class="ph" style="background:${CAT[c.cat]}">${esc(SHORT[c.cat])}</div>`;
   const inner=`<div class="thumb">${pic}<div class="rank">${c.rank}</div><div class="badge ${m.cls}">${m.t}${c.prev&&!c.new?'<br><span style="font-weight:500;color:#5b6275">VW '+c.prev+'</span>':''}</div></div>`;
-  return `<li class="card">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">${inner}</a>`:inner}<div class="ttl">${esc(c.title)}</div><div class="meta"><span class="chip"><i class="sw" style="background:${CAT[c.cat]}"></i>${esc(SHORT[c.cat])}</span><span>${c.weeks} ${c.weeks===1?'Woche':'Wochen'}</span></div><div class="nums"><span><b>${fk(c.base)}</b> ${plat==='ig'?'Reichw.':'Aufrufe'}</span><span>Score <b>${f0(c.score)}</b></span></div></li>`}).join('');
+  return `<li class="card">${u?`<a href="${esc(u)}" target="_blank" rel="noopener">${inner}</a>`:inner}<div class="ttl">${esc(c.title)}</div><div class="meta"><span class="chip"><i class="sw" style="background:${CAT[c.cat]}"></i>${esc(SHORT[c.cat])}</span><span>${c.weeks} ${c.weeks===1?'Woche':'Wochen'}</span></div>${plat==='ig'?`<div class="nums n3"><span><b>${fk((P.posts.find(p=>p.url===c.url)||{}).views||0)}</b>Aufrufe</span><span><b>${fk(c.base)}</b>Reichweite</span><span><b>${f0(c.score)}</b>Score</span></div>`:`<div class="nums"><span><b>${fk(c.base)}</b> Aufrufe</span><span>Score <b>${f0(c.score)}</b></span></div>`}</li>`}).join('');
 
 }
 
